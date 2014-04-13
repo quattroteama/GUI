@@ -18,8 +18,8 @@ PHOTO2 = './images/photo_2_.png'
 PARKINGLOT = './images/parking_lot.gif'
 SCALE = 100
 
-class Draw(object):
-    """docstring for Draw"""
+class GUI(object):
+    """GUI for Auto-Parking """
     def __init__(self):
 
         cwidth = 1300
@@ -30,6 +30,8 @@ class Draw(object):
 
         self.canvasWidth = cwidth
         self.canvasHeight = cheight
+        # create instance of Car class 
+        
 
         # subscriber 
         rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, self.callBackY)
@@ -68,7 +70,9 @@ class Draw(object):
         # self.c.delete(B1)
         # self.c.delete(R1)
         if self.count != 0:
-            self.c.delete(self.carIdx1)
+            for car in carList:
+                self.c.delete(self.car)
+
         self.drawPicture(CAR_YELLOW, "Y", self.linear_x, self.linear_y, self.angular_z)
         self.drawPicture(CAR_BLUE, "B", self.angular_z, self.linear_x, self.linear_y)
         # self.drawPicture(CAR_RED, "R", self.angular_z, self.linear_y, self.linear_y)
@@ -91,14 +95,6 @@ class Draw(object):
         self.timerFired()
         self.root.mainloop()
 
-    ##### util #####
-    def drawPicture(self, carImage, carIdx, linear_x, linear_y, angular_z = 0):
-        img = Image.open(carImage)
-        rotatedImage = img.rotate(angular_z)
-        self.carIdx = ImageTk.PhotoImage(rotatedImage)
-        carIdx1  = carIdx + "1"
-        self.carIdx1 = self.c.create_image(linear_x, linear_y, image=self.carIdx)
-        self.c.pack()
 
     def drawBackground(self, image, linear_x, linear_y, angular_z = 0):
         img = Image.open(image)
@@ -107,8 +103,24 @@ class Draw(object):
         self.background1 = self.c.create_image(linear_x, linear_y, image=self.background)
         self.c.pack()
 
+class Car(object):
+    def __init__(self, carPath):
+
+
+
+         ##### util #####
+    def drawPicture(self, carImage, carIdx, linear_x, linear_y, angular_z = 0):
+        img = Image.open(carImage)
+        rotatedImage = img.rotate(angular_z)
+        self.carIdx = ImageTk.PhotoImage(rotatedImage)
+        carIdx1  = carIdx + "1"
+        self.carIdx1 = self.c.create_image(linear_x, linear_y, image=self.carIdx)
+        self.c.pack()
+
+
+
 def main():      
-    test = Draw()
+    test = GUI()
     test.run()
 
 if __name__ == '__main__':
