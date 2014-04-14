@@ -57,7 +57,7 @@ class Draw(object):
         scale_x = float(435)/625
         scale_y = float(350)/522  
         scale_cmToPixel = 75
-        offset_y = float(45)
+        offset_y = float(40)
 
         xy = 280 + self.linear_xy * scale_x
         yy = 580 - (self.linear_yy - offset_y) * scale_y
